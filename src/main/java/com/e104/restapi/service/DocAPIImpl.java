@@ -1588,13 +1588,14 @@ public class DocAPIImpl implements IDocAPI{
 			
 				Mac hmac = Mac.getInstance("HmacSHA1");
 				
-					hmac.init(new SecretKeySpec(new DefaultAWSCredentialsProviderChain().getCredentials().getAWSSecretKey().getBytes("UTF-8"), "HmacSHA1"));
+					//hmac.init(new SecretKeySpec(new DefaultAWSCredentialsProviderChain().getCredentials().getAWSSecretKey().getBytes("UTF-8"), "HmacSHA1"));
+				hmac.init(new SecretKeySpec(new DefaultAWSCredentialsProviderChain().getCredentials().getAWSSecretKey().getBytes("UTF-8"), "HmacSHA1"));
 				
 				//Map<String, String> cachedUrlMap = new HashMap<String, String>();	
 				
 				signature = Base64.encodeToString(hmac.doFinal(policy.getBytes("UTF-8"))).replaceAll("\n", "");
 				//signature = Base64.encodeBase64(hmac.doFinal(policy.getBytes("UTF-8"))).toString().replaceAll("\n", "");
-					
+				returnObject.put("data", new DefaultAWSCredentialsProviderChain().getCredentials().getAWSSecretKey().getBytes("UTF-8"));	
 				returnObject.put("policyDocument", policy);
 				returnObject.put("signature", signature);
 				returnObject.put("objectKey", filepath_forS3);
@@ -1931,7 +1932,7 @@ public class DocAPIImpl implements IDocAPI{
 		}
 
 		@Override
-		public String healthCheck() {
+		public String healthCheck(String test) {
 			return "ok";
 		}
 		

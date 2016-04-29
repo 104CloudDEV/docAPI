@@ -296,7 +296,7 @@ public interface IDocAPI {
 	   @ApiOperation(value = "healthCheck", notes = "healthCheck", httpMethod = "GET")
 	   @ApiResponses(value =  @ApiResponse(code = 200, message = "Successful response"))
 	   @ApiImplicitParam(name = "param", value = "healthCheck", required = true, dataType = "string", paramType = "string") 	  
-	   public String healthCheck();
+	   public String healthCheck(String test);
 	   
 	   @GET
 	   @Path("/action")
