@@ -27,12 +27,14 @@ import javax.ws.rs.core.Context;
 
 import org.apache.logging.log4j.*;
 import org.aspectj.weaver.patterns.ThrowsPattern;
+import org.eclipse.jetty.util.security.Credential;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import redis.clients.jedis.Jedis;
 
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.e104.Errorhandling.DocApplicationException;
@@ -1586,16 +1588,18 @@ public class DocAPIImpl implements IDocAPI{
 				String policy = Base64.encodeToString(policy_document.getBytes("UTF-8")).replaceAll("\n","").replaceAll("\r","");
 				//String policy = Base64.encodeBase64(policy_document.getBytes("UTF-8")).toString().replaceAll("\n","").replaceAll("\r","");
 			
+				AWSCredentials credential = (new DefaultAWSCredentialsProviderChain()).getCredentials();
 				Mac hmac = Mac.getInstance("HmacSHA1");
 				
+				
 					//hmac.init(new SecretKeySpec(new DefaultAWSCredentialsProviderChain().getCredentials().getAWSSecretKey().getBytes("UTF-8"), "HmacSHA1"));
-				hmac.init(new SecretKeySpec(new DefaultAWSCredentialsProviderChain().getCredentials().getAWSSecretKey().getBytes("UTF-8"), "HmacSHA1"));
+				hmac.init(new SecretKeySpec(credential.getAWSSecretKey().getBytes("UTF-8"), "HmacSHA1"));
 				
 				//Map<String, String> cachedUrlMap = new HashMap<String, String>();	
 				
 				signature = Base64.encodeToString(hmac.doFinal(policy.getBytes("UTF-8"))).replaceAll("\n", "");
 				//signature = Base64.encodeBase64(hmac.doFinal(policy.getBytes("UTF-8"))).toString().replaceAll("\n", "");
-				returnObject.put("data", new DefaultAWSCredentialsProviderChain().getCredentials().getAWSSecretKey());	
+				returnObject.put("AWSAccessKeyId", credential.getAWSAccessKeyId());	
 				returnObject.put("policyDocument", policy);
 				returnObject.put("signature", signature);
 				returnObject.put("objectKey", filepath_forS3);
