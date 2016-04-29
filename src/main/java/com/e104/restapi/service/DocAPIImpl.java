@@ -1932,7 +1932,7 @@ public class DocAPIImpl implements IDocAPI{
 		}
 
 		@Override
-		public String healthCheck(String test) {
+		public String healthCheck() {
 			return "ok";
 		}
 		
