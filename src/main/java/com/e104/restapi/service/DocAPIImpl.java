@@ -1595,7 +1595,7 @@ public class DocAPIImpl implements IDocAPI{
 				
 				signature = Base64.encodeToString(hmac.doFinal(policy.getBytes("UTF-8"))).replaceAll("\n", "");
 				//signature = Base64.encodeBase64(hmac.doFinal(policy.getBytes("UTF-8"))).toString().replaceAll("\n", "");
-				returnObject.put("data", new DefaultAWSCredentialsProviderChain().getCredentials().getAWSSecretKey().getBytes("UTF-8"));	
+				returnObject.put("data", new DefaultAWSCredentialsProviderChain().getCredentials().getAWSSecretKey());	
 				returnObject.put("policyDocument", policy);
 				returnObject.put("signature", signature);
 				returnObject.put("objectKey", filepath_forS3);
